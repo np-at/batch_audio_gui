@@ -67,11 +67,9 @@ class Window(QWidget):
 
         self.InitWindow()
 
-    def do_something(self, output: str = None):
-        # self.console_output.update()
-        # print("Clicked")
+    def print_to_output(self, output: str = None):
         if output is None:
-            self.console_output.appendPlainText("TESTTINGNGNGN")
+            self.console_output.appendPlainText("")
         else:
             self.console_output.appendPlainText(output)
 
@@ -82,9 +80,9 @@ class Window(QWidget):
 
         vbox = QVBoxLayout()
         plainText = QPlainTextEdit()
-        plainText.setPlaceholderText("This is some text for our plaintextedit")
+        plainText.setPlaceholderText("")
 
-        # plainText.setReadOnly(True)
+        plainText.setReadOnly(True)
 
         text = "Welcome!"
 
@@ -101,25 +99,25 @@ class Window(QWidget):
         self.combo = combo
         self.combo_label.move(50, 150)
 
-        btnRun = QtWidgets.QPushButton()
-        btnRun.setText("Run")
-        # btnRun.setEnabled(False)
-        btnRun.setGeometry(QtCore.QRect(150, 100, 75, 23))
-        btnRun.setObjectName("btnRun")
-        btnRun.clicked.connect(self.start_this)
-        self.btnRun = btnRun
+        btn_run = QtWidgets.QPushButton()
+        btn_run.setText("Run")
+        # btn_run.setEnabled(False)
+        btn_run.setGeometry(QtCore.QRect(150, 100, 75, 23))
+        btn_run.setObjectName("btn_run")
+        btn_run.clicked.connect(self.start_this)
+        self.btnRun = btn_run
 
-        btnChooseDirectory = QtWidgets.QPushButton()
-        btnChooseDirectory.setText("Choose Folder")
-        btnChooseDirectory.setEnabled(True)
-        btnChooseDirectory.setGeometry(QtCore.QRect(100, 100, 50, 20))
-        btnChooseDirectory.clicked.connect(self.openDirDialog)
-        self.btnChooseDirectory = btnChooseDirectory
+        btn_choose_directory = QtWidgets.QPushButton()
+        btn_choose_directory.setText("Choose Folder")
+        btn_choose_directory.setEnabled(True)
+        btn_choose_directory.setGeometry(QtCore.QRect(100, 100, 50, 20))
+        btn_choose_directory.clicked.connect(self.openDirDialog)
+        self.btn_choose_directory = btn_choose_directory
 
         vbox.addWidget(self.combo_label)
         vbox.addWidget(self.combo)
         vbox.addWidget(self.btnRun)
-        vbox.addWidget(self.btnChooseDirectory)
+        vbox.addWidget(self.btn_choose_directory)
         vbox.addWidget(self.console_output)
 
         self.setLayout(vbox)
@@ -191,66 +189,15 @@ def ConfirmationDialog(body_text: str, delegate_fxn, confirmation_title: str = "
     box.setText(body_text)
     box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
     box.setDefaultButton(QMessageBox.No)
-    buttonYes = box.button(QMessageBox.Yes)
-    buttonYes.setText("Continue")
-    buttonNo = box.button(QMessageBox.No)
-    buttonNo.setText("Cancel")
+    button_yes = box.button(QMessageBox.Yes)
+    button_yes.setText("Continue")
+    button_no = box.button(QMessageBox.No)
+    button_no.setText("Cancel")
     box.exec_()
 
-    # Executing a routine for quitting the application:
-    if box.clickedButton() == buttonYes:
+    # Execute the delegate function
+    if box.clickedButton() == button_yes:
         return delegate_fxn()
-        #
-
-
-# class Ui_Dialog(object):
-#
-#     @print_to_output
-#     def print_something(self):
-#         # self.console_output.update()
-#         # print("Clicked")
-#         return "HELLLP"
-#
-#     def setupUi(self, Dialog):
-#         Dialog.setObjectName("Dialog")
-#         Dialog.resize(400, 300)
-#         self.console_output = QtWidgets.QPlainTextEdit()
-#
-#         self.console_output.setReadOnly(True)
-#         self.console_output.setPlaceholderText("TESTINGNGNGNG")
-#         self.console_output.setGeometry(QtCore.QRect(100, 100, 100, 200))
-#         self.console_output.move(80, 20)
-#         self.console_output.resize(100, 200)
-#         self.console_output.setObjectName("console_output")
-#         # self.console_output.setPlainText("PLACEHOLDER")
-#         vBox = QVBoxLayout()
-#
-#         self.btnRun = QtWidgets.QPushButton(Dialog)
-#         self.btnRun.setGeometry(QtCore.QRect(150, 100, 75, 23))
-#         self.btnRun.setObjectName("btnRun")
-#         self.btnRun.clicked.connect(self.print_something)
-#
-#         self.retranslateUi(Dialog)
-#         QtCore.QMetaObject.connectSlotsByName(Dialog)
-#
-#     def retranslateUi(self, Dialog):
-#         _translate = QtCore.QCoreApplication.translate
-#         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-#         self.btnRun.setText(_translate("Dialog", "Click me"))
-
-#
-# if __name__ == "__main__":
-#     #
-#     #     app = QtWidgets.QApplication(sys.argv)
-#     #     Dialog = QtWidgets.QDialog()
-#     #     ui = Ui_Dialog()
-#     #     ui.setupUi(Dialog)
-#     #     Dialog.show()
-#     #     sys.exit(app.exec_())
-#
-#     App = QApplication(sys.argv)
-#     window = Window()
-#     sys.exit(App.exec())
 
 
 if __name__ == '__main__':
