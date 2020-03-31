@@ -1,19 +1,18 @@
 import os
 import subprocess
 
+from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import QMessageBox, QFileDialog, QDialog
-from PyQt5.uic.properties import QtCore
 
 
 def FileDialog(directory='', forOpen=True, fmt='', isFolder=False):
     options = QFileDialog.Options()
-    # options |= QFileDialog.DontUseNativeDialog
+    options |= QFileDialog.DontUseNativeDialog
     options |= QFileDialog.DontUseCustomDirectoryIcons
     dialog = QFileDialog()
     dialog.setOptions(options)
 
-    dialog.setFilter(dialog.filter() | QtCore.QDir.Hidden)
-
+    dialog.setFilter(dialog.filter() | QDir.Hidden)
     # ARE WE TALKING ABOUT FILES OR FOLDERS
     if isFolder:
         dialog.setFileMode(QFileDialog.DirectoryOnly)

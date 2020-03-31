@@ -1,6 +1,8 @@
 {
-    "app_name": "BatchAudioConverter",
-    "author": "Noah Praskins",
-    "main_module": "src/main/python/main.py",
-    "version": "0.0.0"
+  "app_name": "BatchAudioConverter",
+  "author": "Noah Praskins",
+  "main_module": "src/main/python/main.py",
+  "version": "0.0.0",
+  "gpg_key": "230C5401A370DE6C6A22088264C20E432970D008",
+  "gpg_name": "Noah Praskins"
 }
