@@ -1,1 +1,3 @@
-from . import MainWindow, _utils
+from . import MainWindow
+from .MainWindow import *
+

@@ -15,7 +15,7 @@ def FileDialog(directory='', forOpen=True, fmt='', isFolder=False):
     dialog.setFilter(dialog.filter() | QDir.Hidden)
     # ARE WE TALKING ABOUT FILES OR FOLDERS
     if isFolder:
-        dialog.setFileMode(QFileDialog.DirectoryOnly)
+        dialog.setFileMode(QFileDialog.Directory)
     else:
         dialog.setFileMode(QFileDialog.AnyFile)
     # OPENING OR SAVING

@@ -92,7 +92,7 @@ class Window(QWidget):
         if v == '':
             sys.exit()
         else:
-            print(v)
+            self.print_to_output(v)
             self.btnRun.setEnabled(True)
             self.target_directory = v
 
