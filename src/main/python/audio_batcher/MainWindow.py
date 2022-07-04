@@ -1,17 +1,25 @@
 import logging
 import os
+import pathlib
 import re
 import shlex
 import sys
 from subprocess import Popen, PIPE
 
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPlainTextEdit, QLabel, QComboBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPlainTextEdit, QLabel, QComboBox, QPushButton
 
-from . import _utils
 from ._utils import ConfirmationDialog, FileDialog
 
+
 class Window(QWidget):
+    target_directory: pathlib.Path
+    combo_label: QLabel
+    combo: QComboBox
+    console_output: QPlainTextEdit
+    btn_choose_directory: QPushButton
+    btnRun: QPushButton
+
     def __init__(self, flags, *args, **kwargs):
         super().__init__(flags, *args, **kwargs)
         self.fileoutput_options = ['.mp3', '.aac', '.flac', '.wav']
@@ -58,14 +66,22 @@ class Window(QWidget):
         self.combo = combo
         self.combo_label.move(50, 150)
 
-        btn_run = QtWidgets.QPushButton()
-        btn_run.setText("Run")
-        # btn_run.setEnabled(False)
-        btn_run.setGeometry(QtCore.QRect(150, 100, 75, 23))
-        btn_run.setObjectName("btn_run")
-        btn_run.clicked.connect(self.start_this)
-        self.btnRun = btn_run
+        self._setup_choose_dir()
+        self._setup_run_btn()
 
+        vbox.addWidget(self.combo_label)
+        vbox.addWidget(self.combo)
+        vbox.addWidget(self.btn_choose_directory)
+        vbox.addWidget(self.text_choose_directory)
+        vbox.addWidget(self.btnRun)
+
+        vbox.addWidget(self.console_output)
+
+        self.setLayout(vbox)
+
+        self.show()
+
+    def _setup_choose_dir(self):
         btn_choose_directory = QtWidgets.QPushButton()
         btn_choose_directory.setText("Choose Folder")
         btn_choose_directory.setEnabled(True)
@@ -73,16 +89,18 @@ class Window(QWidget):
         btn_choose_directory.clicked.connect(self.openDirDialog)
         self.btn_choose_directory = btn_choose_directory
 
-        vbox.addWidget(self.combo_label)
-        vbox.addWidget(self.combo)
-        vbox.addWidget(self.btnRun)
-        vbox.addWidget(self.btn_choose_directory)
-        vbox.addWidget(self.console_output)
+        text_choose_directory = QtWidgets.QLineEdit()
+        text_choose_directory.setPlaceholderText("choose dir")
 
-        self.setLayout(vbox)
+        text_choose_directory.setGeometry(QtCore.QRect(100, 20, 50, 10))
+        text_choose_directory.textChanged.connect(self.set_target_directory)
+        # text_choose_directory.setText(os.path.expanduser("~"))
 
-        self.show()
+        self.text_choose_directory = text_choose_directory
 
+    def set_target_directory(self, t):
+        p = pathlib.Path(t)
+        self.target_directory = p.absolute()
 
     def on_combo_activated(self, text):
         self.convert_to_format = text
@@ -95,6 +113,7 @@ class Window(QWidget):
             self.print_to_output(v)
             self.btnRun.setEnabled(True)
             self.target_directory = v
+            self.text_choose_directory.setText(v)
 
     def start_this(self):
         rl, fl = self.conversion_prep()
@@ -110,7 +129,7 @@ class Window(QWidget):
                 logging.exception(ex)
 
     def conversion_prep(self):
-        extension_re = re.compile(r'(?:.+)(\.[a-zA-Z]{3}$)')
+        extension_re = re.compile(r'.+(\.[a-zA-Z]{3}$)')
 
         if self.target_directory is None:
             raise
@@ -134,3 +153,12 @@ class Window(QWidget):
         self.console_output.appendPlainText(out.decode('utf-8'))
         self.console_output.appendPlainText(err.decode('utf-8'))
         p.wait()
+
+    def _setup_run_btn(self):
+        btn_run = QtWidgets.QPushButton()
+        btn_run.setText("Run")
+        # btn_run.setEnabled(False)
+        btn_run.setGeometry(QtCore.QRect(150, 100, 75, 23))
+        btn_run.setObjectName("btn_run")
+        btn_run.clicked.connect(self.start_this)
+        self.btnRun = btn_run
